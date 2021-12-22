@@ -6,20 +6,35 @@
 //
 
 import Foundation
+import CoreLocation
 
 class CurrentWeatherManager {
     
+    enum RequestType {
+        case cityName(city: String)
+        case coordinate(latitude: CLLocationDegrees, longetude: CLLocationDegrees)
+    }
+    
     var completionHandler: ((CurrentWeather) -> Void )?
     
-    func fetchCurrentWeather(forCity city: String) {
+    
+    func fetchCurrentWeather( forRequestType requestType: RequestType) {
+        var urlString = ""
         
-        let urlString = "https://api.openweathermap.org/data/2.5/weather?q=\(city)&apikey=\(api)&units=metric"
-        let url = URL(string: urlString)
+        switch requestType {
+        case .cityName(let city):
+            urlString = "https://api.openweathermap.org/data/2.5/weather?q=\(city)&apikey=\(api)&units=metric"
+        case .coordinate(let latitude, let longetude):
+            urlString = "https://api.openweathermap.org/data/2.5/weather?lat=\(latitude)&lon=\(longetude)&apikey=\(api)&units=metric"
+        }
+        
+        createReqeust(withURLString: urlString)
+    }
+    
+    fileprivate func createReqeust(withURLString urlString: String){
+        guard let url = URL(string: urlString) else { return }
         let session = URLSession(configuration: .default)
-        guard let url = url else { return }
-        
         let task = session.dataTask(with: url) { data, response, error in
-            
             if let data = data{
                 //let dataString = String(data: data, encoding: .utf8)
                 if let currentWeather = self.parseJSON(fromData: data){
@@ -30,7 +45,7 @@ class CurrentWeatherManager {
         task.resume()
         }
     
-    func parseJSON (fromData data: Data) -> CurrentWeather?{
+    fileprivate func parseJSON (fromData data: Data) -> CurrentWeather?{
         let decoder = JSONDecoder()
         
         do{

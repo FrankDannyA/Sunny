@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     
     @IBAction func searchPressed(_ sender: UIButton) {
         self.presentAlertController(title: "Enter city name", message: nil, style: .alert){ [unowned self] city in
-            self.weatherManager.fetchCurrentWeather(forCity: city)
+            self.weatherManager.fetchCurrentWeather(forRequestType: .cityName(city: city))
             }
     }
     
@@ -62,11 +62,12 @@ extension ViewController : CLLocationManagerDelegate {
         let latitude = location.coordinate.latitude
         let longetude = location.coordinate.longitude
         
+        weatherManager.fetchCurrentWeather(forRequestType: CurrentWeatherManager.RequestType.coordinate(latitude: latitude, longetude: longetude))
         
     }
     
     func locationManager(_ manager: CLLocationManager, didFinishDeferredUpdatesWithError error: Error?) {
-        print(error?.localizedDescription)
+        print(error?.localizedDescription ?? "Ошибка получения геолокации")
     }
 }
 
