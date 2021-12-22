@@ -97,9 +97,9 @@
 		E5407FBC2771F0A70011E92F /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				E5A228222772F6D90054D8E3 /* WeatherManager.swift */,
 				E5A2282627731FC40054D8E3 /* WeatherData.swift */,
 				E5A228282773280B0054D8E3 /* CurrentWeather.swift */,
+				E5A228222772F6D90054D8E3 /* WeatherManager.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";

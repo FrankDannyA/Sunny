@@ -7,11 +7,13 @@
 
 import Foundation
 
-struct CurrentWeatherManager {
+class CurrentWeatherManager {
+    
+    var completionHandler: ((CurrentWeather) -> Void )?
     
     func fetchCurrentWeather(forCity city: String) {
         
-        let urlString = "http://api.openweathermap.org/data/2.5/weather?q=\(city)&apikey=\(api)"
+        let urlString = "https://api.openweathermap.org/data/2.5/weather?q=\(city)&apikey=\(api)&units=metric"
         let url = URL(string: urlString)
         let session = URLSession(configuration: .default)
         guard let url = url else { return }
@@ -20,11 +22,13 @@ struct CurrentWeatherManager {
             
             if let data = data{
                 //let dataString = String(data: data, encoding: .utf8)
-                let currentWeather = self.parseJSON(fromData: data)
+                if let currentWeather = self.parseJSON(fromData: data){
+                    self.completionHandler?(currentWeather)
+                }
+            }
         }
-    }
         task.resume()
- }
+        }
     
     func parseJSON (fromData data: Data) -> CurrentWeather?{
         let decoder = JSONDecoder()
