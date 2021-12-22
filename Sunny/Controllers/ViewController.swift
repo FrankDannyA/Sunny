@@ -8,6 +8,8 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    let weatherManager = CurrentWeatherManager()
 
     @IBOutlet weak var weatherIconImageView: UIImageView!
     @IBOutlet weak var cityLabel: UILabel!
@@ -16,12 +18,16 @@ class ViewController: UIViewController {
     
     
     @IBAction func searchPressed(_ sender: UIButton) {
-        self.presentAlertController(title: "Enter city name", message: nil, style: .alert)
+        self.presentAlertController(title: "Enter city name", message: nil, style: .alert){ city in
+            self.weatherManager.fetchCurrentWeather(forCity: city)
+            }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        weatherManager.fetchCurrentWeather(forCity: "London")
+        
     }
 }
 
