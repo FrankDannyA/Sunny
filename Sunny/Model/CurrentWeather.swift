@@ -44,3 +44,4 @@ struct CurrentWeather{
         imageCode = weatherData.weather.first!.id
     }
 }
+
